@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý Trung tâm - Extra Center</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+            },
+            tealAccent: {
+              500: '#0d9488',
+              600: '#0f766e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen">
+
+  <!-- ==================== LOGIN SCREEN (GIAO DIỆN ĐĂNG NHẬP) ==================== -->
+  <div id="loginScreen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gradient-to-br from-emerald-50 via-teal-50/70 to-slate-100 overflow-y-auto">
+    <div class="bg-white/95 backdrop-blur-md rounded-3xl p-8 sm:p-10 w-full max-w-[420px] shadow-2xl shadow-emerald-500/10 border border-emerald-100/60 flex flex-col items-center">
+      
+      <!-- Graduation Cap Icon -->
+      <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-lg shadow-teal-500/30 mb-5">
+        <i class="fa-solid fa-graduation-cap text-3xl"></i>
+      </div>
+
+      <!-- Heading -->
+      <h1 class="text-2xl sm:text-[26px] font-extrabold text-slate-800 tracking-tight text-center">Quản lý Trung tâm</h1>
+      <p class="text-xs sm:text-sm text-slate-400 mt-1 mb-8 text-center font-medium">Đăng nhập để tiếp tục</p>
+
+      <!-- Login Form -->
+      <form id="loginForm" onsubmit="handleLogin(event)" class="w-full space-y-5">
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">Email</label>
+          <div class="relative">
+            <input 
+              type="text" 
+              id="loginEmail" 
+              required
+              placeholder="giao_vien@email.com" 
+              class="w-full px-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition font-medium"
+            >
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">PIN</label>
+          <div class="relative">
+            <input 
+              type="password" 
+              id="loginPin" 
+              required
+              placeholder="Nhập PIN của bạn" 
+              class="w-full px-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition font-medium tracking-widest"
+            >
+          </div>
+        </div>
+
+        <button 
+          type="submit" 
+          id="btnLoginSubmit"
+          class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 text-white font-bold text-sm shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 active:scale-[0.99] transition-all flex items-center justify-center gap-2 mt-2"
+        >
+          <span>🔐</span>
+          <span>Đăng nhập</span>
+        </button>
+      </form>
+
+      <!-- Quick Mock Test Accounts Helper -->
+      <div class="w-full mt-6 pt-5 border-t border-slate-100">
+        <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 text-center mb-2.5">Tài khoản mẫu thử nhanh</p>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" onclick="fillTestAccount('admin@extra.edu.vn', '1234')" class="p-2 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200/80 hover:border-emerald-300 text-left transition group">
+            <div class="text-[11px] font-bold text-slate-700 group-hover:text-emerald-700">Admin</div>
+            <div class="text-[10px] text-slate-400 font-mono">PIN: 1234</div>
+          </button>
+          <button type="button" onclick="fillTestAccount('giaovien@extra.edu.vn', '5678')" class="p-2 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200/80 hover:border-emerald-300 text-left transition group">
+            <div class="text-[11px] font-bold text-slate-700 group-hover:text-emerald-700">Giáo viên</div>
+            <div class="text-[10px] text-slate-400 font-mono">PIN: 5678</div>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== MAIN DASHBOARD APP CONTAINER ==================== -->
+  <div id="mainApp" class="hidden min-h-screen flex flex-col md:flex-row">
+    <!-- Sidebar -->
+    <aside class="w-full md:w-64 bg-white border-r border-slate-200 flex flex-col shrink-0">
+      <div class="h-16 flex items-center justify-between px-6 border-b border-slate-100">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
+            <i class="fa-solid fa-graduation-cap text-lg"></i>
+          </div>
+          <div>
+            <h1 class="font-bold text-slate-900 leading-tight">Extra Center</h1>
+            <p class="text-[10px] text-emerald-600 font-bold tracking-wider">HỆ THỐNG QUẢN LÝ</p>
+          </div>
+        </div>
+        <button id="mobileMenuBtn" class="md:hidden text-slate-500 hover:text-slate-700 p-2">
+          <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav id="navMenu" class="hidden md:flex flex-col gap-1 p-4 flex-1">
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all text-emerald-700 bg-emerald-50">
+          <i class="fa-solid fa-chart-pie w-5 text-center"></i>
+          <span>Tổng quan</span>
+        </button>
+
+        <button onclick="switchTab('students')" id="nav-students" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+          <i class="fa-solid fa-user-graduate w-5 text-center"></i>
+          <span>Danh sách học sinh</span>
+        </button>
+
+        <button onclick="switchTab('attendance')" id="nav-attendance" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+          <i class="fa-solid fa-calendar-check w-5 text-center"></i>
+          <span>Điểm danh lớp</span>
+        </button>
+
+        <button onclick="switchTab('scores')" id="nav-scores" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+          <i class="fa-solid fa-award w-5 text-center"></i>
+          <span>Bảng điểm & Kỳ thi</span>
+        </button>
+
+        <div class="pt-4 mt-4 border-t border-slate-100">
+          <div class="px-3 pb-2 text-[11px] font-semibold tracking-wider text-slate-400 uppercase">Cài đặt</div>
+          <button onclick="openConfigModal()" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+            <i class="fa-solid fa-plug w-5 text-center text-slate-400"></i>
+            <span>Cấu hình API</span>
+            <span id="apiStatusBadge" class="ml-auto w-2 h-2 rounded-full bg-emerald-500"></span>
+          </button>
+        </div>
+
+        <!-- User Info & Logout Button -->
+        <div class="mt-auto pt-4 border-t border-slate-100">
+          <div class="flex items-center justify-between p-3 bg-slate-50 rounded-2xl border border-slate-100">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs uppercase" id="userAvatar">
+                A
+              </div>
+              <div class="min-w-0">
+                <p id="userNameDisplay" class="text-xs font-bold text-slate-800 truncate">Admin</p>
+                <p id="userRoleDisplay" class="text-[10px] text-slate-400 uppercase font-semibold truncate">Quản trị viên</p>
+              </div>
+            </div>
+            <button onclick="handleLogout()" title="Đăng xuất" class="p-2 text-slate-400 hover:text-rose-600 rounded-lg transition hover:bg-white">
+              <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
+            </button>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
+      <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 sticky top-0 z-10">
+        <div class="flex items-center gap-2">
+          <h2 id="pageTitle" class="text-lg font-bold text-slate-800">Tổng quan trung tâm</h2>
+          <span id="syncIndicator" class="hidden text-xs text-emerald-700 bg-emerald-50 font-medium px-2 py-0.5 rounded-full items-center gap-1">
+            <i class="fa-solid fa-rotate fa-spin text-[10px]"></i> Đang đồng bộ
+          </span>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button onclick="syncAllData()" title="Làm mới dữ liệu từ Google Sheets" class="p-2 text-slate-500 hover:text-emerald-600 hover:bg-slate-100 rounded-xl transition">
+            <i class="fa-solid fa-arrows-rotate text-sm"></i>
+          </button>
+
+          <button onclick="openConfigModal()" class="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 transition">
+            <i class="fa-solid fa-database text-emerald-600"></i>
+            <span class="hidden sm:inline">Nguồn: </span>
+            <span id="currentSourceLabel" class="font-bold text-slate-900">Mock Data</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Content Views Wrapper -->
+      <div class="p-6 md:p-8 space-y-6 max-w-7xl w-full mx-auto">
+                    <th class="pb-2">Ngày</th>
+                    <th class="pb-2 text-right">Trạng thái</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboardAttendanceList" class="divide-y divide-slate-50">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Top Scores Activity -->
+          <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                <i class="fa-solid fa-star text-amber-500"></i>
+                Điểm thi mới cập nhật
+              </h3>
+              <button onclick="switchTab('scores')" class="text-xs text-brand-600 hover:underline font-semibold">Nhập điểm</button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm">
+                <thead>
+                  <tr class="text-slate-400 text-xs border-b border-slate-100">
+                    <th class="pb-2">Học sinh</th>
+                    <th class="pb-2">Kỳ thi</th>
+                    <th class="pb-2">Ngày</th>
+                    <th class="pb-2 text-right">Điểm số</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboardScoreList" class="divide-y divide-slate-50">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ==================== TAB 2: STUDENTS ==================== -->
+      <section id="tab-students" class="tab-content hidden space-y-5">
+        <!-- Actions & Filters -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          <div class="flex flex-1 items-center gap-3">
+            <div class="relative flex-1 max-w-sm">
+              <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+              <input type="text" id="studentSearchInput" placeholder="Tìm theo tên học sinh, SĐT..." class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-brand-500 transition">
+            </div>
+            <select id="studentClassFilter" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm focus:outline-none focus:border-brand-500">
+              <option value="ALL">Tất cả lớp</option>
+            </select>
+          </div>
+          <button onclick="openAddStudentModal()" class="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-sm transition">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>Thêm học sinh</span>
+          </button>
+        </div>
+
+        <!-- Student Table -->
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-slate-50 border-b border-slate-100 text-slate-500 text-xs uppercase tracking-wider font-semibold">
+                <tr>
+                  <th class="py-3.5 px-5">Mã HS</th>
+                  <th class="py-3.5 px-5">Họ và tên</th>
+                  <th class="py-3.5 px-5">Lớp học</th>
+                  <th class="py-3.5 px-5">Phụ huynh</th>
+                  <th class="py-3.5 px-5">Số điện thoại</th>
+                  <th class="py-3.5 px-5 text-right">Tùy chọn</th>
+                </tr>
+              </thead>
+              <tbody id="studentTableBody" class="divide-y divide-slate-100">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ==================== TAB 3: ATTENDANCE ==================== -->
+      <section id="tab-attendance" class="tab-content hidden space-y-5">
+        <!-- Control Bar -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-3">
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Chọn lớp học</label>
+              <select id="attendantClassSelect" onchange="renderAttendanceSheet()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-brand-500 font-semibold text-slate-700">
+                <!-- Injected via JS -->
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Ngày điểm danh</label>
+              <input type="date" id="attendantDatePicker" onchange="renderAttendanceSheet()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-brand-500 text-slate-700">
+            </div>
+          </div>
+          <div class="flex items-center gap-2 self-end md:self-center">
+            <span class="text-xs text-slate-400 mr-2">Nhấp trực tiếp nút để đổi trạng thái</span>
+          </div>
+        </div>
+
+        <!-- Attendance List Card -->
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-slate-50 border-b border-slate-100 text-slate-500 text-xs uppercase tracking-wider font-semibold">
+                <tr>
+                  <th class="py-3.5 px-5">Mã HS</th>
+                  <th class="py-3.5 px-5">Tên học sinh</th>
+                  <th class="py-3.5 px-5">Số điện thoại</th>
+                  <th class="py-3.5 px-5 text-center">Trạng thái điểm danh</th>
+                  <th class="py-3.5 px-5 text-right">Lưu dữ liệu</th>
+                </tr>
+              </thead>
+              <tbody id="attendanceTableBody" class="divide-y divide-slate-100">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ==================== TAB 4: SCORES ==================== -->
+      <section id="tab-scores" class="tab-content hidden space-y-5">
+        <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <select id="scoreClassFilter" onchange="renderScoreTable()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-brand-500">
+              <option value="ALL">Tất cả lớp</option>
+            </select>
+          </div>
+          <button onclick="openAddScoreModal()" class="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-sm transition">
+            <i class="fa-solid fa-plus"></i>
+            <span>Nhập điểm mới</span>
+          </button>
+        </div>
+
+        <!-- Scores Table -->
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-slate-50 border-b border-slate-100 text-slate-500 text-xs uppercase tracking-wider font-semibold">
+                <tr>
+                  <th class="py-3.5 px-5">Mã kỳ thi</th>
+                  <th class="py-3.5 px-5">Học sinh</th>
+                  <th class="py-3.5 px-5">Lớp</th>
+                  <th class="py-3.5 px-5">Bài kiểm tra</th>
+                  <th class="py-3.5 px-5">Ngày</th>
+                  <th class="py-3.5 px-5 text-right">Điểm số</th>
+                </tr>
+              </thead>
+              <tbody id="scoreTableBody" class="divide-y divide-slate-100">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- 1. API Config Modal -->
+  <div id="configModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-100 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+          <i class="fa-solid fa-sliders text-brand-600"></i>
+          Cấu hình kết nối Google Sheets
+        </h3>
+        <button onclick="closeConfigModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <p class="text-xs text-slate-500 leading-relaxed">
+        Dán URL Web App triển khai từ Google Apps Script (Bước 2 trong video) để kết nối trực tiếp với Database Google Sheets thực tế của bạn.
+      </p>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-700 mb-1">Google Apps Script Web App URL</label>
+        <input type="url" id="gasUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-mono focus:outline-none focus:border-brand-500">
+        <p class="text-[11px] text-slate-400 mt-1">Lưu trữ bảo mật trong bộ nhớ trình duyệt (localStorage).</p>
+      </div>
+
+      <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+        <button onclick="resetToMockData()" class="text-xs text-amber-600 hover:underline font-semibold">
+          Dùng Mock Data (Thử nghiệm)
+        </button>
+        <div class="flex gap-2">
+          <button onclick="closeConfigModal()" class="px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition">Đóng</button>
+          <button onclick="saveApiConfig()" class="px-4 py-2 text-xs font-semibold bg-brand-600 hover:bg-brand-700 text-white rounded-xl shadow-sm transition">Lưu & Kết nối</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Add Student Modal -->
+  <div id="addStudentModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+          <i class="fa-solid fa-user-plus text-brand-600"></i>
+          Thêm học sinh mới
+        </h3>
+        <button onclick="closeAddStudentModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="addStudentForm" onsubmit="handleAddStudent(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Mã học sinh</label>
+          <input type="text" id="newStudentId" required placeholder="STU_..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Họ và tên</label>
+          <input type="text" id="newStudentName" required placeholder="Nguyễn Văn A" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Lớp đăng ký</label>
+          <select id="newStudentClass" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500">
+            <!-- Injected via JS -->
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Họ tên phụ huynh</label>
+          <input type="text" id="newParentName" required placeholder="Tên cha / mẹ" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Số điện thoại liên hệ</label>
+    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+  <script>
+    /**
+     * Extra Center Core State Management
+     */
+    const INITIAL_MOCK_DATA = {
+      User: [
+        { user_id: "admin@extra.edu.vn", name: "Ban Quản Trị", role: "admin", pin: "1234" },
+        { user_id: "giaovien@extra.edu.vn", name: "Cô Phương Thảo", role: "teacher", pin: "5678" }
+      ],
+      Class: [
+        { class_id: "CLS_E09", class_name: "Tiếng Anh 9 - Luyện thi vào 10", tuition_fee: 1800000, start_date: "2026-09-05", teacher_id: "TCH_01" },
+        { class_id: "CLS_M06", class_name: "Toán 6 - Ôn tập HK1", tuition_fee: 1500000, start_date: "2026-09-10", teacher_id: "TCH_02" },
+        { class_id: "CLS_IELTS", class_name: "Luyện thi IELTS 6.5+", tuition_fee: 3200000, start_date: "2026-10-01", teacher_id: "TCH_01" },
+        { class_id: "CLS_M10", class_name: "Toán 10 - Nâng cao", tuition_fee: 2000000, start_date: "2026-09-08", teacher_id: "TCH_03" },
+        { class_id: "CLS_COMM", class_name: "Tiếng Anh Giao tiếp Cơ bản", tuition_fee: 1600000, start_date: "2026-10-15", teacher_id: "TCH_01" }
+      ],
+      Student: [
+        { student_id: "STU_001", full_name: "Nguyễn Minh Khang", parent_name: "Nguyễn Văn Hùng", phone: "0908123456", class_id: "CLS_E09" },
+        { student_id: "STU_002", full_name: "Trần Bảo Ngọc", parent_name: "Lê Thị Mai", phone: "0912345678", class_id: "CLS_E09" },
+        { student_id: "STU_003", full_name: "Lê Hoàng Nam", parent_name: "Lê Quốc Bảo", phone: "0938112233", class_id: "CLS_M06" },
+        { student_id: "STU_004", full_name: "Phạm Thảo Vy", parent_name: "Nguyễn Thị Cúc", phone: "0987654321", class_id: "CLS_M06" },
+        { student_id: "STU_005", full_name: "Đỗ Gia Huy", parent_name: "Đỗ Thành Đạt", phone: "0903998877", class_id: "CLS_IELTS" },
+        { student_id: "STU_006", full_name: "Vũ Khánh Linh", parent_name: "Vũ Hoài Phương", phone: "0945667788", class_id: "CLS_IELTS" },
+        { student_id: "STU_007", full_name: "Huỳnh Anh Khoa", parent_name: "Huỳnh Tấn Tài", phone: "0918223344", class_id: "CLS_M10" },
+        { student_id: "STU_008", full_name: "Võ Tuyết Mai", parent_name: "Nguyễn Bích Lan", phone: "0977889900", class_id: "CLS_COMM" }
+      ],
+      Attendant: [
+        { attendant_id: "ATT_101", student_id: "STU_001", class_id: "CLS_E09", date: "2026-11-02", status: "Present" },
+        { attendant_id: "ATT_102", student_id: "STU_002", class_id: "CLS_E09", date: "2026-11-02", status: "Late" },
+        { attendant_id: "ATT_103", student_id: "STU_001", class_id: "CLS_E09", date: "2026-11-05", status: "Present" },
+        { attendant_id: "ATT_104", student_id: "STU_002", class_id: "CLS_E09", date: "2026-11-05", status: "Absent" },
+        { attendant_id: "ATT_105", student_id: "STU_003", class_id: "CLS_M06", date: "2026-11-03", status: "Present" },
+        { attendant_id: "ATT_106", student_id: "STU_004", class_id: "CLS_M06", date: "2026-11-03", status: "Present" },
+        { attendant_id: "ATT_107", student_id: "STU_005", class_id: "CLS_IELTS", date: "2026-11-04", status: "Present" },
+        { attendant_id: "ATT_108", student_id: "STU_006", class_id: "CLS_IELTS", date: "2026-11-04", status: "Late" },
+        { attendant_id: "ATT_109", student_id: "STU_007", class_id: "CLS_M10", date: "2026-11-06", status: "Present" }
+      ],
+      Score: [
+        { score_id: "SCR_01", student_id: "STU_001", class_id: "CLS_E09", exam_name: "15 Phút - Từ vựng Unit 1-3", score_value: 8.5, date: "2026-10-15" },
+        { score_id: "SCR_02", student_id: "STU_002", class_id: "CLS_E09", exam_name: "15 Phút - Từ vựng Unit 1-3", score_value: 9.0, date: "2026-10-15" },
+        { score_id: "SCR_03", student_id: "STU_001", class_id: "CLS_E09", exam_name: "Giữa Kỳ 1", score_value: 8.0, date: "2026-11-01" },
+        { score_id: "SCR_04", student_id: "STU_002", class_id: "CLS_E09", exam_name: "Giữa Kỳ 1", score_value: 9.5, date: "2026-11-01" },
+        { score_id: "SCR_05", student_id: "STU_003", class_id: "CLS_M06", exam_name: "Kiểm tra 1 tiết Số học", score_value: 7.5, date: "2026-10-20" },
+        { score_id: "SCR_06", student_id: "STU_004", class_id: "CLS_M06", exam_name: "Kiểm tra 1 tiết Số học", score_value: 10.0, date: "2026-10-20" },
+        { score_id: "SCR_07", student_id: "STU_005", class_id: "CLS_IELTS", exam_name: "Mock Test Reading & Listening", score_value: 6.5, date: "2026-10-28" },
+        { score_id: "SCR_08", student_id: "STU_006", class_id: "CLS_IELTS", exam_name: "Mock Test Reading & Listening", score_value: 7.0, date: "2026-10-28" },
+        { score_id: "SCR_09", student_id: "STU_007", class_id: "CLS_M10", exam_name: "Kiểm tra Mệnh đề - Tập hợp", score_value: 8.8, date: "2026-10-25" }
+      ]
+    };
+
+    let appData = JSON.parse(JSON.stringify(INITIAL_MOCK_DATA));
+    let gasUrl = localStorage.getItem("EXTRA_CENTER_GAS_URL") || "";
+    let currentAttendanceDraft = {};
+
+    // Check login state
+    window.onload = function() {
+      checkLoginSession();
+
+      const today = new Date().toISOString().split('T')[0];
+      const attDateInput = document.getElementById("attendantDatePicker");
+      const scoreDateInput = document.getElementById("newScoreDate");
+      if (attDateInput) attDateInput.value = today;
+      if (scoreDateInput) scoreDateInput.value = today;
+
+      const mobileBtn = document.getElementById("mobileMenuBtn");
+      const navMenu = document.getElementById("navMenu");
+      if (mobileBtn && navMenu) {
+        mobileBtn.addEventListener("click", () => navMenu.classList.toggle("hidden"));
+      }
+
+      document.getElementById("studentSearchInput").addEventListener("input", renderStudentTable);
+      document.getElementById("studentClassFilter").addEventListener("change", renderStudentTable);
+
+      updateApiStatusUI();
+    };
+
+    /**
+     * Authentication Logic
+     */
+    function fillTestAccount(email, pin) {
+      document.getElementById("loginEmail").value = email;
+      document.getElementById("loginPin").value = pin;
+    }
+
+    function checkLoginSession() {
+      const sessionUser = sessionStorage.getItem("EXTRA_CENTER_AUTH_USER");
+      if (sessionUser) {
+        const user = JSON.parse(sessionUser);
+        displayDashboard(user);
+      } else {
+        document.getElementById("loginScreen").classList.remove("hidden");
+        document.getElementById("mainApp").classList.add("hidden");
+      }
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+      const pin = document.getElementById("loginPin").value.trim();
+      const btn = document.getElementById("btnLoginSubmit");
+      
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Đang xác thực...`;
+
+      try {
+        let users = appData.User;
+        // Nếu có GAS URL, thử nạp User từ Google Sheets về
+        if (gasUrl) {
+          try {
+            const res = await fetch(`${gasUrl}?action=read&sheet=User`);
+            const json = await res.json();
+            if (json.data && json.data.length > 0) {
+              users = json.data;
+              appData.User = json.data;
+            }
+          } catch(err) {
+            console.warn("Không tải được User từ Sheet, dùng danh sách dự phòng.");
+          }
+        }
+
+        const matched = users.find(u => 
+          (String(u.user_id || '').toLowerCase() === email || String(u.email || '').toLowerCase() === email) && 
+          String(u.pin) === String(pin)
+        );
+
+        if (matched) {
+          sessionStorage.setItem("EXTRA_CENTER_AUTH_USER", JSON.stringify(matched));
+          showToast(`Chào mừng, ${matched.name || 'Thầy/Cô'}!`, "success");
+          displayDashboard(matched);
+        } else {
+          showToast("Email hoặc mã PIN không chính xác!", "error");
+        }
+      } catch (err) {
+        showToast("Lỗi trong quá trình xác thực", "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>🔐</span><span>Đăng nhập</span>`;
+      }
+    }
+
+    function displayDashboard(user) {
+      document.getElementById("loginScreen").classList.add("hidden");
+      document.getElementById("mainApp").classList.remove("hidden");
+      
+      document.getElementById("userNameDisplay").innerText = user.name || "Giáo viên";
+      document.getElementById("userRoleDisplay").innerText = (user.role === 'admin' ? "Quản trị viên" : "Giáo viên");
+      document.getElementById("userAvatar").innerText = (user.name || "U").charAt(0);
+
+      if (gasUrl) {
+        syncAllData();
+      } else {
+        refreshAllViews();
+      }
+    }
+
+    function handleLogout() {
+      sessionStorage.removeItem("EXTRA_CENTER_AUTH_USER");
+      document.getElementById("mainApp").classList.add("hidden");
+      document.getElementById("loginScreen").classList.remove("hidden");
+      document.getElementById("loginPin").value = "";
+      showToast("Đã đăng xuất khỏi hệ thống", "info");
+    }
+
+    /**
+     * Switch Navigation Tabs
+     */
+    function switchTab(tabId) {
+      document.querySelectorAll(".tab-content").forEach(el => el.classList.add("hidden"));
+      document.getElementById(`tab-${tabId}`).classList.remove("hidden");
+
+      // Update Nav Button Styles
+      document.querySelectorAll(".nav-item").forEach(btn => {
+        btn.className = "nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900";
+      });
+      const activeBtn = document.getElementById(`nav-${tabId}`);
+      if (activeBtn) {
+        activeBtn.className = "nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all text-brand-600 bg-brand-50";
+      }
+
+      // Update Header Title
+      const titleMap = {
+        dashboard: "Tổng quan trung tâm",
+        students: "Danh sách học sinh",
+        attendance: "Nhật ký điểm danh",
+        scores: "Quản lý điểm số"
+      };
+      document.getElementById("pageTitle").innerText = titleMap[tabId] || "Extra Center";
+
+      // Re-render specific views if needed
+      if (tabId === 'attendance') renderAttendanceSheet();
+      if (tabId === 'students') renderStudentTable();
+      if (tabId === 'scores') renderScoreTable();
+    }
+
+    /**
+     * API Config Modal Handlers
+     */
+    function openConfigModal() {
+      document.getElementById("gasUrlInput").value = gasUrl;
+      document.getElementById("configModal").classList.remove("hidden");
+    }
+
+    function closeConfigModal() {
+      document.getElementById("configModal").classList.add("hidden");
+    }
+
+    function saveApiConfig() {
+      const inputVal = document.getElementById("gasUrlInput").value.trim();
+      gasUrl = inputVal;
+      localStorage.setItem("EXTRA_CENTER_GAS_URL", gasUrl);
+      updateApiStatusUI();
+      closeConfigModal();
+      showToast("Đã lưu URL API thành công", "success");
+      if (gasUrl) {
+        syncAllData();
+      }
+    }
+
+    function resetToMockData() {
+      gasUrl = "";
+      localStorage.removeItem("EXTRA_CENTER_GAS_URL");
+      document.getElementById("gasUrlInput").value = "";
+      appData = JSON.parse(JSON.stringify(INITIAL_MOCK_DATA));
+      updateApiStatusUI();
+      closeConfigModal();
+      refreshAllViews();
+      showToast("Đã chuyển sang chế độ dữ liệu mẫu", "info");
+    }
+
+    function updateApiStatusUI() {
+      const label = document.getElementById("currentSourceLabel");
+      const badge = document.getElementById("apiStatusBadge");
+      if (gasUrl) {
+        label.innerText = "Google Sheets (Live)";
+        label.className = "font-bold text-emerald-600";
+        badge.className = "ml-auto w-2 h-2 rounded-full bg-emerald-500";
+      } else {
+        label.innerText = "Mock Data (Nội bộ)";
+        label.className = "font-bold text-amber-600";
+        badge.className = "ml-auto w-2 h-2 rounded-full bg-amber-500";
+      }
+    }
+
+    /**
+     * Synchronize with Google Apps Script
+     */
+    async function syncAllData() {
+      if (!gasUrl) {
+        refreshAllViews();
+        return;
+      }
+
+      const indicator = document.getElementById("syncIndicator");
+      indicator.classList.remove("hidden");
+      indicator.classList.add("inline-flex");
+
+      try {
+        const sheets = ["Class", "Student", "Attendant", "Score"];
+        const promises = sheets.map(name => 
+          fetch(`${gasUrl}?action=read&sheet=${name}`)
+            .then(res => res.json())
+            .then(res => ({ sheet: name, data: res.data || [] }))
+            .catch(() => ({ sheet: name, data: null }))
+        );
+
+        const results = await Promise.all(promises);
+        results.forEach(res => {
+          if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+            appData[res.sheet] = res.data;
+          }
+        });
+
+        showToast("Đã đồng bộ dữ liệu mới nhất từ Google Sheets", "success");
+      } catch (err) {
+        console.error("Sync error:", err);
+        showToast("Lỗi khi kết nối Google Sheets. Đang dùng dữ liệu cache.", "error");
+      } finally {
+        indicator.classList.add("hidden");
+        indicator.classList.remove("inline-flex");
+        refreshAllViews();
+      }
+    }
+
+    /**
+     * Send POST request to Google Apps Script
+     */
+    async function postToGAS(sheetName, rowData) {
+      if (!gasUrl) {
+        // Fallback to local memory
+        appData[sheetName].unshift(rowData);
+        return { success: true };
+      }
+
+      const res = await fetch(gasUrl, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          action: "create",
+          sheet: sheetName,
+          row: rowData
+        })
+      });
+      return await res.json();
+    }
+
+    /**
+     * Global Refresh UI
+     */
+    function refreshAllViews() {
+      populateClassDropdowns();
+      renderDashboard();
+      renderStudentTable();
+      renderAttendanceSheet();
+      renderScoreTable();
+    }
+
+    /**
+     * Populate Select Inputs with Classes
+     */
+    function populateClassDropdowns() {
+      const classes = appData.Class || [];
+      
+      // Filter in student tab
+      const studentFilter = document.getElementById("studentClassFilter");
+      const currentFilter = studentFilter.value;
+      studentFilter.innerHTML = '<option value="ALL">Tất cả lớp</option>';
+      
+      // Select in attendance tab
+      const attSelect = document.getElementById("attendantClassSelect");
+      const currentAttClass = attSelect.value;
+      attSelect.innerHTML = '';
+
+      // Select in add student modal
+      const newStuClass = document.getElementById("newStudentClass");
+      newStuClass.innerHTML = '';
+
+      // Select in score filter
+      const scoreClassFilter = document.getElementById("scoreClassFilter");
+      const currentScoreFilter = scoreClassFilter.value;
+      scoreClassFilter.innerHTML = '<option value="ALL">Tất cả lớp</option>';
+
+      classes.forEach(c => {
+        studentFilter.innerHTML += `<option value="${c.class_id}">${c.class_name}</option>`;
+        attSelect.innerHTML += `<option value="${c.class_id}">${c.class_name} (${c.class_id})</option>`;
+        newStuClass.innerHTML += `<option value="${c.class_id}">${c.class_name}</option>`;
+        scoreClassFilter.innerHTML += `<option value="${c.class_id}">${c.class_name}</option>`;
+      });
+
+      if (currentFilter) studentFilter.value = currentFilter;
+      if (currentAttClass && classes.some(c => c.class_id === currentAttClass)) {
+        attSelect.value = currentAttClass;
+      }
+      if (currentScoreFilter) scoreClassFilter.value = currentScoreFilter;
+    }
+
+    /**
+     * 1. Render Dashboard
+     */
+    function renderDashboard() {
+      const students = appData.Student || [];
+      const classes = appData.Class || [];
+      const attendants = appData.Attendant || [];
+      const scores = appData.Score || [];
+
+      // Stats
+      document.getElementById("statTotalStudents").innerText = students.length;
+      document.getElementById("statTotalClasses").innerText = classes.length;
+
+      // Calculate attendance rate
+      if (attendants.length > 0) {
+        const presentCount = attendants.filter(a => a.status === 'Present').length;
+        const rate = Math.round((presentCount / attendants.length) * 100);
+        document.getElementById("statAttendanceRate").innerText = `${rate}%`;
+      } else {
+        document.getElementById("statAttendanceRate").innerText = `100%`;
+      }
+
+      // Calculate Tuition total
+      let totalEst = 0;
+      students.forEach(s => {
+        const cl = classes.find(c => c.class_id === s.class_id);
+        if (cl && cl.tuition_fee) {
+          totalEst += Number(cl.tuition_fee);
+        }
+      });
+      document.getElementById("statTuitionEst").innerText = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalEst);
+
+      // Dashboard Attendance List (Latest 5)
+      const recentAtt = attendants.slice(-5).reverse();
+      const attTable = document.getElementById("dashboardAttendanceList");
+      if (recentAtt.length === 0) {
+        attTable.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-xs text-slate-400">Chưa có lịch sử điểm danh</td></tr>`;
+      } else {
+        attTable.innerHTML = recentAtt.map(a => {
+          const student = students.find(s => s.student_id === a.student_id);
+          const studentName = student ? student.full_name : a.student_id;
+          const statusBadge = a.status === 'Present' ? '<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-600">Có mặt</span>' :
+                              a.status === 'Late' ? '<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-600">Đi trễ</span>' :
+                              '<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-600">Vắng mặt</span>';
+
+          return `
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-2.5 font-medium text-slate-800 text-xs">${studentName}</td>
+              <td class="py-2.5 text-slate-500 text-xs">${a.class_id}</td>
+              <td class="py-2.5 text-slate-400 text-xs">${a.date}</td>
+              <td class="py-2.5 text-right">${statusBadge}</td>
+            </tr>
+          `;
+        }).join("");
+      }
+
+      // Dashboard Score List (Latest 5)
+      const recentScores = scores.slice(-5).reverse();
+      const scoreTable = document.getElementById("dashboardScoreList");
+      if (recentScores.length === 0) {
+        scoreTable.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-xs text-slate-400">Chưa có kết quả kiểm tra</td></tr>`;
+      } else {
+        scoreTable.innerHTML = recentScores.map(sc => {
+          const student = students.find(s => s.student_id === sc.student_id);
+          const studentName = student ? student.full_name : sc.student_id;
+          return `
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-2.5 font-medium text-slate-800 text-xs">${studentName}</td>
+              <td class="py-2.5 text-slate-500 text-xs">${sc.exam_name}</td>
+              <td class="py-2.5 text-slate-400 text-xs">${sc.date}</td>
+              <td class="py-2.5 text-right font-bold text-brand-600 text-xs">${sc.score_value}</td>
+            </tr>
+          `;
+        }).join("");
+      }
+    }
+
+    /**
+     * 2. Render Student Directory
+     */
+    function renderStudentTable() {
+      const students = appData.Student || [];
+      const classes = appData.Class || [];
+      const search = (document.getElementById("studentSearchInput").value || "").toLowerCase();
+      const classFilter = document.getElementById("studentClassFilter").value;
+
+      const filtered = students.filter(s => {
+        const matchSearch = (s.full_name || "").toLowerCase().includes(search) || 
+                            (s.phone || "").includes(search) ||
+                            (s.student_id || "").toLowerCase().includes(search);
+        const matchClass = classFilter === "ALL" || s.class_id === classFilter;
+        return matchSearch && matchClass;
+      });
+
+      const tbody = document.getElementById("studentTableBody");
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-sm text-slate-400">Không tìm thấy học sinh nào phù hợp</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(s => {
+        const cls = classes.find(c => c.class_id === s.class_id);
+        const className = cls ? cls.class_name : s.class_id;
+        return `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-3 px-5 font-mono text-xs font-semibold text-slate-500">${s.student_id}</td>
+            <td class="py-3 px-5 font-semibold text-slate-800">${s.full_name}</td>
+            <td class="py-3 px-5 text-slate-600 text-xs">
+              <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-medium">${className}</span>
+            </td>
+            <td class="py-3 px-5 text-slate-500 text-xs">${s.parent_name || '---'}</td>
+            <td class="py-3 px-5 text-slate-700 font-medium text-xs">
+              <a href="tel:${s.phone}" class="hover:text-brand-600"><i class="fa-solid fa-phone text-[10px] mr-1 text-slate-400"></i>${s.phone}</a>
+            </td>
+            <td class="py-3 px-5 text-right">
+              <button onclick="quickLogScore('${s.student_id}')" title="Nhập điểm cho học sinh này" class="p-1.5 text-slate-400 hover:text-brand-600 rounded-lg hover:bg-slate-100 transition">
+                <i class="fa-solid fa-award"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    /**
+     * 3. Render Attendance Sheet
+     */
+    function renderAttendanceSheet() {
+      const selectedClass = document.getElementById("attendantClassSelect").value;
+      const selectedDate = document.getElementById("attendantDatePicker").value;
+      const students = (appData.Student || []).filter(s => s.class_id === selectedClass);
+      const attendants = appData.Attendant || [];
+
+      const tbody = document.getElementById("attendanceTableBody");
+      if (students.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-sm text-slate-400">Lớp này hiện chưa có học sinh nào đăng ký.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = students.map(s => {
+        // Find existing saved record in database
+        const existingRecord = attendants.find(a => a.student_id === s.student_id && a.date === selectedDate);
+        
+        // Use drafted status or saved status or default to Present
+        const currentStatus = currentAttendanceDraft[s.student_id] || (existingRecord ? existingRecord.status : "Present");
+
+        return `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-3 px-5 font-mono text-xs font-semibold text-slate-500">${s.student_id}</td>
+            <td class="py-3 px-5 font-semibold text-slate-800">${s.full_name}</td>
+            <td class="py-3 px-5 text-slate-500 text-xs">${s.phone}</td>
+            <td class="py-3 px-5 text-center">
+              <div class="inline-flex rounded-xl p-1 bg-slate-100 border border-slate-200">
+                <button type="button" onclick="setAttendanceStatus('${s.student_id}', 'Present')" class="px-3 py-1 rounded-lg text-xs font-semibold transition ${currentStatus === 'Present' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
+                  Có mặt
+                </button>
+                <button type="button" onclick="setAttendanceStatus('${s.student_id}', 'Late')" class="px-3 py-1 rounded-lg text-xs font-semibold transition ${currentStatus === 'Late' ? 'bg-amber-500 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
+                  Đi trễ
+                </button>
+                <button type="button" onclick="setAttendanceStatus('${s.student_id}', 'Absent')" class="px-3 py-1 rounded-lg text-xs font-semibold transition ${currentStatus === 'Absent' ? 'bg-rose-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
+                  Vắng
+                </button>
+              </div>
+            </td>
+            <td class="py-3 px-5 text-right">
+              <button onclick="saveSingleAttendance('${s.student_id}', '${selectedClass}', '${selectedDate}')" class="px-3 py-1.5 bg-slate-100 hover:bg-brand-600 hover:text-white rounded-xl text-xs font-semibold text-slate-700 transition">
+                <i class="fa-solid fa-floppy-disk mr-1"></i> Lưu
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function setAttendanceStatus(studentId, status) {
+      currentAttendanceDraft[studentId] = status;
+      renderAttendanceSheet();
+    }
+
+    async function saveSingleAttendance(studentId, classId, date) {
+      const status = currentAttendanceDraft[studentId] || "Present";
+      const newRecord = {
+        attendant_id: `ATT_${Date.now().toString().slice(-6)}`,
+        student_id: studentId,
+        class_id: classId,
+        date: date,
+        status: status
+      };
+
+      try {
+        await postToGAS("Attendant", newRecord);
+        // Update local state if live
+        const existingIdx = appData.Attendant.findIndex(a => a.student_id === studentId && a.date === date);
+        if (existingIdx > -1) {
+          appData.Attendant[existingIdx].status = status;
+        } else {
+          appData.Attendant.push(newRecord);
+        }
+        delete currentAttendanceDraft[studentId];
+        renderDashboard();
+        showToast("Đã lưu điểm danh học sinh", "success");
+      } catch (err) {
+        showToast("Lỗi khi lưu điểm danh", "error");
+      }
+    }
+
+    /**
+     * 4. Render Scores Table
+     */
+    function renderScoreTable() {
+      const scores = appData.Score || [];
+      const students = appData.Student || [];
+      const classes = appData.Class || [];
+      const filter = document.getElementById("scoreClassFilter").value;
+
+      const filtered = scores.filter(sc => filter === "ALL" || sc.class_id === filter);
+      const tbody = document.getElementById("scoreTableBody");
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-sm text-slate-400">Chưa có bản ghi điểm số nào</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(sc => {
+        const student = students.find(s => s.student_id === sc.student_id);
+        const studentName = student ? student.full_name : sc.student_id;
+        const cls = classes.find(c => c.class_id === sc.class_id);
+        const className = cls ? cls.class_name : sc.class_id;
+
+        return `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-3 px-5 font-mono text-xs text-slate-400">${sc.score_id}</td>
+            <td class="py-3 px-5 font-semibold text-slate-800">${studentName}</td>
+            <td class="py-3 px-5 text-slate-500 text-xs">${className}</td>
+            <td class="py-3 px-5 text-slate-700 text-xs font-medium">${sc.exam_name}</td>
+            <td class="py-3 px-5 text-slate-400 text-xs">${sc.date}</td>
+            <td class="py-3 px-5 text-right font-bold text-brand-600 text-sm">${sc.score_value}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    /**
+     * Add Student Modal Handlers
+     */
+    function openAddStudentModal() {
+      document.getElementById("newStudentId").value = `STU_${String((appData.Student.length + 1)).padStart(3, '0')}`;
+      document.getElementById("addStudentModal").classList.remove("hidden");
+    }
+
+    function closeAddStudentModal() {
+      document.getElementById("addStudentModal").classList.add("hidden");
+      document.getElementById("addStudentForm").reset();
+    }
+
+    async function handleAddStudent(e) {
+      e.preventDefault();
+      const btn = document.getElementById("btnSubmitStudent");
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...`;
+
+      const newStudent = {
+        student_id: document.getElementById("newStudentId").value.trim(),
+        full_name: document.getElementById("newStudentName").value.trim(),
+        class_id: document.getElementById("newStudentClass").value,
+        parent_name: document.getElementById("newParentName").value.trim(),
+        phone: document.getElementById("newStudentPhone").value.trim()
+      };
+
+      try {
+        await postToGAS("Student", newStudent);
+        appData.Student.push(newStudent);
+        closeAddStudentModal();
+        refreshAllViews();
+        showToast("Đã thêm học sinh mới thành công", "success");
+      } catch (err) {
+        showToast("Lỗi khi thêm học sinh", "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `Thêm vào hệ thống`;
+      }
+    }
+
+    /**
+     * Add Score Modal Handlers
+     */
+    function openAddScoreModal() {
+      const studentSelect = document.getElementById("scoreStudentSelect");
+      studentSelect.innerHTML = (appData.Student || []).map(s => `
+        <option value="${s.student_id}" data-class="${s.class_id}">${s.full_name} (${s.student_id})</option>
+      `).join("");
+
+      document.getElementById("addScoreModal").classList.remove("hidden");
+    }
+
+    function quickLogScore(studentId) {
+      openAddScoreModal();
+      document.getElementById("scoreStudentSelect").value = studentId;
+    }
+
+    function closeAddScoreModal() {
+      document.getElementById("addScoreModal").classList.add("hidden");
+      document.getElementById("addScoreForm").reset();
+    }
+
+    async function handleAddScore(e) {
+      e.preventDefault();
+      const btn = document.getElementById("btnSubmitScore");
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...`;
+
+      const studentSelect = document.getElementById("scoreStudentSelect");
+      const selectedOption = studentSelect.options[studentSelect.selectedIndex];
+      const classId = selectedOption.getAttribute("data-class") || "";
+
+      const newScore = {
+        score_id: `SCR_${Date.now().toString().slice(-6)}`,
+        student_id: studentSelect.value,
+        class_id: classId,
+        exam_name: document.getElementById("newScoreExamName").value.trim(),
+        score_value: parseFloat(document.getElementById("newScoreValue").value),
+        date: document.getElementById("newScoreDate").value
+      };
+
+      try {
+        await postToGAS("Score", newScore);
+        appData.Score.push(newScore);
+        closeAddScoreModal();
+        renderDashboard();
+        renderScoreTable();
+        showToast("Đã ghi nhận điểm thi mới", "success");
+      } catch (err) {
+        showToast("Lỗi khi ghi nhận điểm", "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `Lưu kết quả`;
+      }
+    }
+  </script>
+</body>
+</html>
